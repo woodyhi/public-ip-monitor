@@ -1,7 +1,7 @@
 import configparser
 
 import mailsender
-import ip_util
+import util
 import logger
 
 
@@ -33,11 +33,11 @@ def main():
     程序入口
     """
 
-    external_ip_info = ip_util.get_external_ip_info();
-    now_ip = ip_util.find_ip(external_ip_info)
-    if ip_util.is_ip_changed(now_ip):
+    external_ip_info = util.get_public_ip_info();
+    now_ip = util.find_ip_from(external_ip_info)
+    if util.is_ip_changed(now_ip):
         if send_mail('public-ip', external_ip_info):
-            ip_util.cache_ip(now_ip)
+            util.cache_ip(now_ip)
 
 
 if __name__ == '__main__':

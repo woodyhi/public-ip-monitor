@@ -31,7 +31,7 @@ def http_opener(head={
     return opener
 
 
-def get_external_ip_info():
+def get_public_ip_info():
     """
     请求ip138来返回外网ip地址和地址信息
 
@@ -57,7 +57,7 @@ def get_external_ip_info():
     return result
 
 
-def find_ip(str):
+def find_ip_from(str):
     re_compile = re.compile('(?<=\[).*?(?=\])')
     all = re_compile.findall(str)
     if all.__len__() > 0:
@@ -92,9 +92,9 @@ def cache_ip(ip):
 if __name__ == '__main__':
     # cachefilepath = "cache_ip.txt" # 保存
 
-    ip_info = get_external_ip_info()
+    ip_info = get_public_ip_info()
     print(ip_info)
-    now_ip = find_ip(ip_info)
+    now_ip = find_ip_from(ip_info)
 
     if now_ip != None:
         print(now_ip)
