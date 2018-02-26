@@ -19,11 +19,10 @@ def send_mail(subject, content):
     content = content
 
     result = mailsender.send_starttls(smtphost, port, user, pwd, receiver, subject, content)
-    if (result):
+    if result:
         logger.log('邮件发送成功')
         return True
     else:
-        logger.log(result)
         logger.log('邮件发送失败')
         return False
 

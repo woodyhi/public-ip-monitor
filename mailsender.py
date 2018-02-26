@@ -3,6 +3,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.header import Header
 
+import logger
+
 
 def send_ssl(smtp_server, smtp_port, from_user, from_password, receiver, subject, content):
     """
@@ -30,8 +32,8 @@ def send_ssl(smtp_server, smtp_port, from_user, from_password, receiver, subject
         smtpObj.sendmail(from_user, receiver, msg.as_string())
         return True
     except smtplib.SMTPException as e:
-        print(e)
-        return e
+        logger.log(e)
+        return False
 
 
 def send_starttls(smtp_server, smtp_port, from_user, from_password, receiver, subject, content):
@@ -61,8 +63,8 @@ def send_starttls(smtp_server, smtp_port, from_user, from_password, receiver, su
         smtpObj.sendmail(from_user, receiver, msg.as_string())
         return True
     except smtplib.SMTPException as e:
-        print(e)
-        return e
+        logger.log(e)
+        return False
 
 
 if __name__ == '__main__':
