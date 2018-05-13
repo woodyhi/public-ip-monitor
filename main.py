@@ -33,10 +33,14 @@ def main():
     """
 
     external_ip_info = util.get_public_ip_info();
-    now_ip = util.find_ip_from(external_ip_info)
-    if util.is_ip_changed(now_ip):
-        if send_mail('public-ip', external_ip_info):
-            util.cache_ip(now_ip)
+    if external_ip_info != None:
+        now_ip = util.find_ip_from(external_ip_info)
+        if util.is_ip_changed(now_ip):
+            if send_mail('public-ip', external_ip_info):
+                util.cache_ip(now_ip)
+    else:
+        print("获取外网IP地址失败")
+
 
 
 if __name__ == '__main__':

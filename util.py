@@ -45,16 +45,18 @@ def get_public_ip_info():
 
         if 'html' in response.getheader('Content-Type'):
             html = response.read().decode('gb2312')
+            logger.log(html)
+
+            # 解析html
+            re_comp = re.compile('(?<=<center>).*?(?=</center>)')
+            all_match = re_comp.findall(html)
+            result = all_match[0]
+            logger.log(result)
+            return result
+
     except Exception as e:
         print(e)
         logger.log(e)
-
-    # 解析html
-    re_comp = re.compile('(?<=<center>).*?(?=</center>)')
-    all_match = re_comp.findall(html)
-    result = all_match[0]
-    logger.log(result)
-    return result
 
 
 def find_ip_from(str):
@@ -93,13 +95,14 @@ if __name__ == '__main__':
     # cachefilepath = "cache_ip.txt" # 保存
 
     ip_info = get_public_ip_info()
-    print(ip_info)
-    now_ip = find_ip_from(ip_info)
+    if ip_info != None:
+        now_ip = find_ip_from(ip_info)
 
-    if now_ip != None:
-        print(now_ip)
+        if now_ip != None:
+            print(now_ip)
 
-        if is_ip_changed(now_ip):
-            cache_ip(now_ip)
+            if is_ip_changed(now_ip):
+                cache_ip(now_ip)
+
     else:
         print("获取外网IP地址失败")
