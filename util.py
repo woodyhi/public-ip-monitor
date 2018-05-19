@@ -1,10 +1,9 @@
-import re
-
 import os
 import urllib
 from http import cookiejar
 
 import logger
+import query_ip
 
 ip_cache_path = "ip.cache"  # 保存IP到本地的路径
 
@@ -29,41 +28,6 @@ def http_opener(head={
         header.append(item)
     opener.addheaders = header
     return opener
-
-
-def get_public_ip_info():
-    """
-    请求ip138来返回外网ip地址和地址信息
-
-    :return:
-    """
-    url = 'http://2017.ip138.com/ic.asp'
-
-    try:
-        opener = http_opener()
-        response = opener.open(url, timeout=2000)
-
-        if 'html' in response.getheader('Content-Type'):
-            html = response.read().decode('gb2312')
-            logger.log(html)
-
-            # 解析html
-            re_comp = re.compile('(?<=<center>).*?(?=</center>)')
-            all_match = re_comp.findall(html)
-            result = all_match[0]
-            logger.log(result)
-            return result
-
-    except Exception as e:
-        print(e)
-        logger.log(e)
-
-
-def find_ip_from(str):
-    re_compile = re.compile('(?<=\[).*?(?=\])')
-    all = re_compile.findall(str)
-    if all.__len__() > 0:
-        return all[0]
 
 
 def is_ip_changed(now_ip):
@@ -94,15 +58,15 @@ def cache_ip(ip):
 if __name__ == '__main__':
     # cachefilepath = "cache_ip.txt" # 保存
 
-    ip_info = get_public_ip_info()
-    if ip_info != None:
-        now_ip = find_ip_from(ip_info)
-
-        if now_ip != None:
-            print(now_ip)
-
-            if is_ip_changed(now_ip):
-                cache_ip(now_ip)
-
-    else:
-        print("获取外网IP地址失败")
+    ip_info = query_ip.query()
+    # if ip_info != None:
+    #     now_ip = find_ip_from(ip_info)
+    #
+    #     if now_ip != None:
+    #         print(now_ip)
+    #
+    #         if is_ip_changed(now_ip):
+    #             cache_ip(now_ip)
+    #
+    # else:
+    #     print("获取外网IP地址失败")

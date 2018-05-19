@@ -1,8 +1,9 @@
 import configparser
 
+import logger
 import mailsender
 import util
-import logger
+from query_ip import query
 
 
 def send_mail(subject, content):
@@ -31,12 +32,11 @@ def main():
     """
     程序入口
     """
-
-    external_ip_info = util.get_public_ip_info();
-    if external_ip_info != None:
-        now_ip = util.find_ip_from(external_ip_info)
+    ip_dict = query()
+    if ip_dict != None:
+        now_ip = ip_dict['ip']
         if util.is_ip_changed(now_ip):
-            if send_mail('public-ip', external_ip_info):
+            if send_mail('public-ip', ip_dict['info']):
                 util.cache_ip(now_ip)
     else:
         print("获取外网IP地址失败")
