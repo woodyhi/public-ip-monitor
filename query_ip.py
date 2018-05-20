@@ -88,6 +88,10 @@ def query():
     ip_dict = get_public_ip_info()
     if ip_dict == None:
         ip_dict = get_public_ip_info_2()
+
+    if ip_dict != None:
+        logger.log(ip_dict)
+
     return ip_dict
 
 

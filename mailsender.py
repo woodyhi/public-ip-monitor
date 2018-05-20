@@ -70,7 +70,7 @@ def send_starttls(smtp_server, smtp_port, from_user, from_password, receiver, su
 if __name__ == '__main__':
     # test
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read('config.ini', encoding='utf-8')
 
     smtphost = config['smtp']['SmtpHost']
     port = config['smtp']['Port']
