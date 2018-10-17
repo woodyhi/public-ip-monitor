@@ -28,6 +28,21 @@ def send_mail(subject, content):
         return False
 
 
+def template(param):
+    content = 'Dear Woody：\n'
+    content += param
+
+    content += '''
+    
+秦时明月汉时关，万里长征人未还。
+但是龙城飞将在，不教胡马度阴山。
+
+Best Regards!
+'''
+    print(content)
+    return content
+
+
 def main():
     """
     程序入口
@@ -39,18 +54,8 @@ def main():
         if util.is_ip_changed(now_ip):
             # 构建邮件内容 尽量避免spam
             subject = 'public-ip'  # 主题
-            content = '''
-          Dear,Woody：
 
-                秦时明月汉时关，万里长征人未还。
-                但是龙城飞将在，不教胡马度阴山。
-          '''
-
-            content = content  + '\n' + ip_dict['info'] + '\n'
-
-            content = content + '\nBest Regards!'
-
-            print(content)
+            content = template(ip_dict['info'])
 
             if send_mail(subject, content):
                 util.cache_ip(now_ip)
