@@ -3,7 +3,7 @@ import configparser
 import logger
 import mailsender
 import util
-from query_ip import query
+import query_ip
 
 
 def send_mail(subject, content):
@@ -47,8 +47,8 @@ def main():
     """
     程序入口
     """
-    ip_dict = query()
-    if ip_dict != None:
+    ip_dict = query_ip.query()
+    if ip_dict is not None:
         now_ip = ip_dict['ip']
 
         if util.is_ip_changed(now_ip):
@@ -59,10 +59,24 @@ def main():
 
             if send_mail(subject, content):
                 util.cache_ip(now_ip)
+    else:
+        print("获取外网IP地址失败")
 
+
+def main2():
+    ip_address = query_ip.check_ip()
+    if ip_address is not None:
+        if util.is_ip_changed(ip_address):
+            # 构建邮件内容 尽量避免spam
+            subject = 'public-ip'  # 主题
+
+            content = template(ip_address)
+
+            if send_mail(subject, content):
+                util.cache_ip(ip_address)
     else:
         print("获取外网IP地址失败")
 
 
 if __name__ == '__main__':
-    main()
+    main2()
